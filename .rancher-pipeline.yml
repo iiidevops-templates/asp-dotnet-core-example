@@ -1,5 +1,5 @@
 stages:
-- name: Test--SonarQube source code scan
+- name: Test--SonarQube for ASP.NET
   iiidevops: sonarqube
   steps:
   #dotnet build ../ASP-MVC-example.sln;
