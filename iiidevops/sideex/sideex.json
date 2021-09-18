@@ -1,10 +1,10 @@
 {
-  "time": 1620802619211,
+  "time": 1631972287339,
   "version": {
     "sideex": [
       3,
       5,
-      3
+      4
     ],
     "format": [
       2,
@@ -18,7 +18,7 @@
       "enableOnPlaying": true,
       "cases": [
         {
-          "title": "Untitled Test Case 10",
+          "title": "test-example",
           "enableOnPlaying": true,
           "networkSpeed": 9.96,
           "records": [
@@ -29,7 +29,7 @@
                 "options": [
                   {
                     "type": "other",
-                    "value": "${target_origin}"
+                    "value": "${target_url}"
                   }
                 ],
                 "tac": ""
@@ -39,7 +39,7 @@
                 "options": [
                   {
                     "type": "other",
-                    "value": "${target_origin}"
+                    "value": ""
                   }
                 ],
                 "tac": ""
