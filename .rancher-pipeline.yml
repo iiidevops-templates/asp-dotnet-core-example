@@ -198,7 +198,7 @@ stages:
       catalogTemplate: cattle-global-data:iii-dev-charts3-test-sideex
       name: ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-sdx
       targetNamespace: ${CICD_GIT_REPO_NAME}
-      version: 0.2.0
+      version: 0.3.0
   when:
     branch:
       include:
