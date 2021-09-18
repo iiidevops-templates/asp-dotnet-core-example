@@ -2,22 +2,17 @@ stages:
 - name: Test--SonarQube for ASP.NET
   iiidevops: sonarqube
   steps:
-  #dotnet build ../ASP-MVC-example.sln;
   - runScriptConfig:
       image: mcr.microsoft.com/dotnet/sdk
-      shellScript: cd app; 
-        echo 'Install scan package';
-        apt-get update && apt install -y default-jre nodejs;
-        dotnet tool install --global dotnet-sonarscanner;
-        echo '增加套件可用指令';
-        export PATH="$PATH:/root/.dotnet/tools";
-        dotnet-sonarscanner begin /k:${CICD_GIT_REPO_NAME} /n:${CICD_GIT_REPO_NAME} /v:${CICD_GIT_BRANCH}:${CICD_GIT_COMMIT} /d:sonar.host.url=http://sonarqube-server-service.default:9000;
-        dotnet build ../ASP-MVC-example.sln;
-        dotnet-sonarscanner end
+      shellScript: "cd app; echo 'Install scan package'; apt-get update && apt install\
+        \ -y default-jre nodejs; dotnet tool install --global dotnet-sonarscanner;\
+        \ echo '\u589E\u52A0\u5957\u4EF6\u53EF\u7528\u6307\u4EE4'; export PATH=\"\
+        $PATH:/root/.dotnet/tools\"; dotnet-sonarscanner begin /k:${CICD_GIT_REPO_NAME}\
+        \ /n:${CICD_GIT_REPO_NAME} /v:${CICD_GIT_BRANCH}:${CICD_GIT_COMMIT} /d:sonar.host.url=http://sonarqube-server-service.default:9000;\
+        \ dotnet build ../ASP-MVC-example.sln; dotnet-sonarscanner end"
   when:
     branch:
       include:
-      - master
       - develop
 - name: Test--Checkmarx source code scan
   iiidevops: checkmarx
@@ -36,7 +31,6 @@ stages:
   when:
     branch:
       include:
-      - master
       - develop
 - name: Deploy--Set Web environment variables
   iiidevops: deployed-environments
@@ -60,7 +54,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Build--Build and push docker image
   iiidevops: deployed-environments
   steps:
@@ -79,7 +73,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Deploy--Web
   iiidevops: deployed-environments
   steps:
@@ -101,7 +95,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Deploy--Wait Web deployment
   iiidevops: deployed-environments
   steps:
@@ -123,7 +117,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Test--ZAP
   iiidevops: zap
   steps:
@@ -143,7 +137,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Test--WebInspect
   iiidevops: webinspect
   steps:
@@ -162,7 +156,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Test--Postman
   iiidevops: postman
   steps:
@@ -182,7 +176,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip
 - name: Test--SideeX
   iiidevops: sideex
   steps:
