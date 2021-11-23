@@ -3,7 +3,7 @@ stages:
   iiidevops: sonarqube
   steps:
   - runScriptConfig:
-      image: mcr.microsoft.com/dotnet/sdk:3.1-focal
+      image: mcr.microsoft.com/dotnet/sdk
       shellScript: "cd app; echo 'Install scan package'; apt-get update && apt install\
         \ -y default-jre nodejs; dotnet tool install --global dotnet-sonarscanner;\
         \ echo '\u589E\u52A0\u5957\u4EF6\u53EF\u7528\u6307\u4EE4'; export PATH=\"\
