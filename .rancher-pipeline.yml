@@ -24,7 +24,7 @@ stages:
   - runScriptConfig:
       image: mcr.microsoft.com/dotnet/sdk:3.1-focal
       shellScript: "cd app; echo 'Install scan package'; apt-get update && apt install\
-        \ -y default-jre nodejs; dotnet tool install --global dotnet-sonarscanner;\
+        \ -y default-jre nodejs; dotnet tool install --global dotnet-sonarscanner; npx browserslist@latest --update-db;\
         \ echo '\u589E\u52A0\u5957\u4EF6\u53EF\u7528\u6307\u4EE4'; export PATH=\"\
         $PATH:/root/.dotnet/tools\"; dotnet-sonarscanner begin /k:${CICD_GIT_REPO_NAME}\
         \ /n:${CICD_GIT_REPO_NAME} /v:${CICD_GIT_BRANCH}:${CICD_GIT_COMMIT} /d:sonar.host.url=http://sonarqube-server-service.default:9000;\
