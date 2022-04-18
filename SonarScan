@@ -4,4 +4,4 @@ echo 'Add dotnet tools into PATH' && export PATH="$PATH:/root/.dotnet/tools"
 dotnet-sonarscanner\
     begin /d:sonar.login=$SONAR_LOGIN /k:$PROJECT_NAME /n:$PROJECT_NAME /v:$GIT_BRANCH:$GIT_COMMIT_ID\
     /d:sonar.host.url=http://sonarqube-server-service.default:9000\
-	&& dotnet build ../ASP-MVC-example.sln && dotnet-sonarscanner end /d:sonar.login=$SONAR_TOKEN
+	&& dotnet build ../ASP-MVC-example.sln && dotnet-sonarscanner end /d:sonar.login=$SONAR_LOGIN
