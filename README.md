@@ -212,11 +212,12 @@ D:.
 ![](https://i.imgur.com/7cjHk66.png)
 放過去以後會像是這樣
 ## 修改.rancher-pipeline.yaml檔案
-這個是因為目前的範本Rancher-pipeline掃描並未針對.NET做處理，因此要進行修正，同時需要注意要修改sln的檔案位置與名稱為專案的名稱，詳細如下:
+範本預設的是NETCoreApp 3.1，如果開發者使用的版本比較新，這邊要才需要修改成相對應的版本，否則不用進行更改，只要有asp_dot_net.enabled: true即可，詳細如下:
 ### 原本範本(未修改前)
-![](https://i.imgur.com/t3dogUD.png)
+
 ```
-- name: Test--SonarQube source code scan
+- name: Test--SonarQube for ASP.NET
+  iiidevops: sonarqube
   steps:
   - applyAppConfig:
       answers:
@@ -224,11 +225,13 @@ D:.
         git.commitID: ${CICD_GIT_COMMIT}
         git.repoName: ${CICD_GIT_REPO_NAME}
         git.url: ${CICD_GIT_URL}
+        harbor.host: harbor-dev3.iiidevops.org
         pipeline.sequence: ${CICD_EXECUTION_SEQUENCE}
+        asp_dot_net.enabled: true
       catalogTemplate: cattle-global-data:iii-dev-charts3-scan-sonarqube
       name: ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-sq
       targetNamespace: ${CICD_GIT_REPO_NAME}
-      version: 0.1.0
+      version: 0.2.5
   when:
     branch:
       include:
@@ -236,25 +239,31 @@ D:.
       - develop
 ```
 ### 修改範本(修改後)
-這裡有一行是`dotnet build ../ASP-MVC-example.sln;`這個是指專案根目錄的`ASP-MVC-example.sln`檔案，這個sln名稱根據放進來的sln檔案名稱與路徑替換過去即可。
+如果開發環境比NETCoreApp 3.1版本更新，要增加一行tag` asp_dot_net.tag: ;`這邊請根據DockerFile裡面的版本進行修正。
+![](https://i.imgur.com/qHLbn2R.png)
 ```
-- name: Test--SonarQube source code scan
+- name: Test--SonarQube for ASP.NET
+  iiidevops: sonarqube
   steps:
-  - runScriptConfig:
-      image: mcr.microsoft.com/dotnet/sdk
-      shellScript: cd app; 
-        echo 'Install scan package';
-        apt-get update && apt install -y default-jre nodejs;
-        dotnet tool install --global dotnet-sonarscanner;
-        export PATH="$PATH:/root/.dotnet/tools";
-        dotnet-sonarscanner begin /k:${CICD_GIT_REPO_NAME} /n:${CICD_GIT_REPO_NAME} /v:${CICD_GIT_BRANCH}:${CICD_GIT_COMMIT} /d:sonar.host.url=http://sonarqube-server-service.default:9000;
-        dotnet build ../ASP-MVC-example.sln;
-        dotnet-sonarscanner end
+  - applyAppConfig:
+      answers:
+        git.branch: ${CICD_GIT_BRANCH}
+        git.commitID: ${CICD_GIT_COMMIT}
+        git.repoName: ${CICD_GIT_REPO_NAME}
+        git.url: ${CICD_GIT_URL}
+        harbor.host: harbor-dev3.iiidevops.org
+        pipeline.sequence: ${CICD_EXECUTION_SEQUENCE}
+        asp_dot_net.enabled: true
+        asp_dot_net.tag: 6.0
+      catalogTemplate: cattle-global-data:iii-dev-charts3-scan-sonarqube
+      name: ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-sq
+      targetNamespace: ${CICD_GIT_REPO_NAME}
+      version: 0.2.5
   when:
     branch:
       include:
       - master
-      - develop  
+      - develop
 ```
 
 ## 修改sln檔案
