@@ -6,5 +6,5 @@ update-locale LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 dotnet-sonarscanner\
     begin /d:sonar.login=$SONAR_LOGIN /k:$PROJECT_NAME /n:$PROJECT_NAME /v:$GIT_BRANCH:$GIT_COMMIT_ID\
-    /d:sonar.host.url=http://sonarqube-server-service.default:9000 /d:sonar.exclusions=../iiidevops/**,../docs/**\
+    /d:sonar.host.url=http://sonarqube-server-service.default:9000 /d:sonar.exclusions=../iiidevops/**,../docs/**,wwwroot/**\
 	&& dotnet build ../ASP-MVC-example.sln && dotnet-sonarscanner end /d:sonar.login=$SONAR_LOGIN
