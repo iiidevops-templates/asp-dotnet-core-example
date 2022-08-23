@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:3.1.28 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:3.1.28 AS build
+FROM mcr.microsoft.com/dotnet/sdk:3.1.422 AS build
 WORKDIR /src
 COPY ["app/ASP-MVC-example.csproj", "app/"]
 RUN dotnet restore "app/ASP-MVC-example.csproj"
