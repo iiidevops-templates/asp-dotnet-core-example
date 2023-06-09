@@ -7,7 +7,7 @@ stages:
       sourceName: nexus
       targetKey: api_origin
     runScriptConfig:
-      image: iiiorg/iiidevops-cli:0.0.1
+      image: iiiorg/iiidevops-cli:0.0.4
       shellScript: curl --location -s --request POST ${api_origin}/rancher/delete_app
         --form project_name=${CICD_GIT_REPO_NAME} --form branch_name=${CICD_GIT_BRANCH}
         && curl --location -s --request POST ${api_origin}/project/issues_commit_by_name
@@ -63,10 +63,10 @@ stages:
       sourceName: rancher
       targetKey: rancher_url
     runScriptConfig:
-      image: iiiorg/iiidevops-cli:0.0.1
+      image: iiiorg/iiidevops-cli:0.0.4
       shellScript: rancher login ${rancher_url} -t ${rancher_api_token} --skip-verify
         && rancher kubectl delete configmap -n ${CICD_GIT_REPO_NAME} ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-env
-        --ignore-not-found=true && perl iiidevops/bin/chk-app-env.pl && rancher kubectl
+        --ignore-not-found=true && chk-app-env.pl && rancher kubectl
         create configmap -n ${CICD_GIT_REPO_NAME} ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-env
         --from-env-file=iiidevops/app.env && rancher kubectl annotate configmap -n
         ${CICD_GIT_REPO_NAME} ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-env iiidevops.org/project_name=${CICD_GIT_REPO_NAME}
@@ -103,7 +103,7 @@ stages:
       sourceName: nexus
       targetKey: api_origin
     runScriptConfig:
-      image: iiiorg/iiidevops-cli:0.0.1
+      image: iiiorg/iiidevops-cli:0.0.4
       shellScript: curl --location -s --request POST ${api_origin}/v2/harbor/${CICD_GIT_REPO_NAME}/scan
         --form branch=${CICD_GIT_BRANCH} --form commit_id=${CICD_GIT_COMMIT}
   when:
@@ -129,8 +129,8 @@ stages:
         volumeMounts.nfs.enabled: false
         volumeMounts.nfs.server: 10.20.0.100
         volumeMounts.project: ${CICD_GIT_REPO_NAME}
-        volumeMounts.uuid: fca2b994-b212-11ec-9a09-5ed3230a7360
-        volumeMounts.mountPath: /usr/src/app/files
+        volumeMounts.uuid : fca2b994-b212-11ec-9a09-5ed3230a7360
+        volumeMounts.mountPath: '/usr/src/app/files'        
       catalogTemplate: cattle-global-data:iii-dev-charts3-web
       name: ${CICD_GIT_REPO_NAME}-${CICD_GIT_BRANCH}-serv
       targetNamespace: ${CICD_GIT_REPO_NAME}
@@ -154,7 +154,7 @@ stages:
       sourceName: rancher
       targetKey: rancher_url
     runScriptConfig:
-      image: iiiorg/iiidevops-cli:0.0.1
+      image: iiiorg/iiidevops-cli:0.0.4
       shellScript: rancher login ${rancher_url} -t ${rancher_api_token} --skip-verify;
         deploy-wait.pl
   when:
@@ -180,7 +180,7 @@ stages:
   when:
     branch:
       include:
-      - master
+      - skip-master
 - name: Test--ZAP
   iiidevops: zap
   steps:
